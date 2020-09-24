@@ -19,8 +19,15 @@ public class EmployeeServicesImpl implements EmployeeServices {
 	@Autowired
 	private EmployeeMapper employeeMapper;
 
+	/**
+	 * 首次添加将员工状态职为1
+	 *
+	 * @param employee
+	 * @return
+	 */
 	@Override
 	public int addEmployee(Employee employee) {
+		employee.setStatus(1);
 		return employeeMapper.addEmployee(employee);
 	}
 

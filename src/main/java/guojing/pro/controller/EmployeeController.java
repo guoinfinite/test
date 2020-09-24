@@ -2,6 +2,8 @@ package guojing.pro.controller;
 
 import guojing.pro.entity.Employee;
 import guojing.pro.services.EmployeeServices;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -21,6 +23,8 @@ import java.util.Map;
 @RequestMapping("/employee")
 public class EmployeeController {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private EmployeeServices employeeServices;
 
@@ -35,6 +39,7 @@ public class EmployeeController {
 		Map<String, Object> map = new HashMap<>();
 		Employee employee = null;
 		employee = employeeServices.getEmployeeById(id);
+		logger.info("employee = " + employee);
 		map.put("data", employee);
 		if (employee != null) {
 			map.put("msg", "查询成功");
@@ -64,16 +69,14 @@ public class EmployeeController {
 
 	@PostMapping("/save")
 	public Map<String, Object> save(@Valid @RequestBody Employee employee, BindingResult bindingResult) {
-		System.out.println("employee = " + employee);
+		logger.info("employee = " + employee);
 		Map<String, Object> map = new HashMap<>();
 		boolean errors = bindingResult.hasErrors();
 		if (errors) {
 			List<FieldError> errors1 = bindingResult.getFieldErrors();
 			for (FieldError error : errors1) {
-				System.out.println("错误消息提示：" + error.getDefaultMessage());
-				System.out.println("错误的字段是？" + error.getField());
-				System.out.println(errors);
-				System.out.println("------------------------");
+				logger.info("错误消息提示：" + error.getDefaultMessage());
+				logger.info("错误的字段是？" + error.getField());
 				map.put(error.getField(), error.getDefaultMessage());
 			}
 		} else {
@@ -82,7 +85,7 @@ public class EmployeeController {
 				map.put("msg", "添加成功");
 				map.put("code", "1");
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.info(e.getMessage());
 				map.put("msg", "添加失败");
 				map.put("code", "0");
 			}
@@ -92,16 +95,14 @@ public class EmployeeController {
 
 	@PostMapping("/edit")
 	public Map<String, Object> update(@Valid @RequestBody Employee employee, BindingResult bindingResult) {
-		System.out.println("employee = " + employee);
+		logger.info("employee = " + employee);
 		Map<String, Object> map = new HashMap<>();
 		boolean errors = bindingResult.hasErrors();
 		if (errors) {
 			List<FieldError> errors1 = bindingResult.getFieldErrors();
 			for (FieldError error : errors1) {
-				System.out.println("错误消息提示：" + error.getDefaultMessage());
-				System.out.println("错误的字段是？" + error.getField());
-				System.out.println(errors);
-				System.out.println("------------------------");
+				logger.info("错误消息提示：" + error.getDefaultMessage());
+				logger.info("错误的字段是？" + error.getField());
 				map.put(error.getField(), error.getDefaultMessage());
 			}
 		} else {
@@ -110,10 +111,26 @@ public class EmployeeController {
 				map.put("msg", "修改成功");
 				map.put("code", "1");
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.info(e.getMessage());
 				map.put("msg", "修改失败");
 				map.put("code", "0");
 			}
+		}
+		return map;
+	}
+
+	@GetMapping("/delete/{id}")
+
+	public Map<String, Object> delete(@PathVariable("id") Long id) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			employeeServices.deleteEmployeeById(id);
+			map.put("msg", "删除成功");
+			map.put("code", "1");
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("msg", "删除失败");
+			map.put("code", "0");
 		}
 		return map;
 	}

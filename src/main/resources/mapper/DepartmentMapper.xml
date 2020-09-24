@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guojing.pro.mapper.DepartmentMapper">
+
+    <resultMap id="dept" type="guojing.pro.entity.Department">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="desc" column="desc"/>
+        <association property="parent" javaType="guojing.pro.entity.Department">
+            <id property="id" column="pid"/>
+            <result property="name" column="pname"/>
+        </association>
+    </resultMap>
+
+    <select id="getDept" resultMap="dept">
+        SELECT d.id, d.name, d.desc, p.id as pid, ifnull(p.name, '无') AS pname
+        FROM t_department AS d
+                     LEFT JOIN t_department AS p ON d.parent_id = p.id
+        WHERE d.status = 1
+          AND d.id = #{id,jdbcType=BIGINT};
+    </select>
+
+    <select id="getAllDept" resultMap="dept">
+        SELECT d.id, d.name, d.desc, p.id as pid, ifnull(p.name, '无') AS pname
+        FROM t_department AS d
+                     LEFT JOIN t_department AS p ON d.parent_id = p.id
+        WHERE d.status = 1
+    </select>
+
+    <insert id="save">
+        INSERT INTO t_department(name, `desc`, parent_id, `status`) VALUES
+                (#{name,jdbcType=VARCHAR},#{desc,jdbcType=VARCHAR},#{pid,jdbcType=BIGINT},#{status,jdbcType=INTEGER})
+    </insert>
+
+    <update id="updateDept">
+        UPDATE t_department SET `name` = #{name,jdbcType=VARCHAR}, `desc` = #{desc,jdbcType=VARCHAR}, parent_id =
+                #{pid,jdbcType=BIGINT} WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteById">
+        UPDATE t_department SET status = 0 WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateParent">
+        UPDATE t_department SET parent_id = 0 WHERE parent_id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

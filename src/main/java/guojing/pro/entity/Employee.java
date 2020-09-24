@@ -27,6 +27,10 @@ public class Employee {
 	@NotEmpty(message = "地址不能为空")
 	private String address;
 
+	private Integer status = 1;
+
+	private Department dept;
+
 	public Employee() {
 	}
 
@@ -70,6 +74,22 @@ public class Employee {
 		this.address = address;
 	}
 
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Department getDept() {
+		return dept;
+	}
+
+	public void setDept(Department dept) {
+		this.dept = dept;
+	}
+
 	@Override
 	public String toString() {
 		return "Employee{" +
@@ -78,6 +98,8 @@ public class Employee {
 				", name='" + name + '\'' +
 				", gender=" + gender +
 				", address='" + address + '\'' +
+				", status=" + status +
+				", dept=" + dept +
 				'}';
 	}
 }

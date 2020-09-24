@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guojing.pro.mapper.EmployeeMapper">
+
+    <resultMap id="employee" type="guojing.pro.entity.Employee">
+        <id column="id" property="id"/>
+        <result property="name" column="ename"/>
+        <result property="age" column="age"/>
+        <result property="gender" column="gender"/>
+        <result property="address" column="address"/>
+        <association property="dept" javaType="guojing.pro.entity.Department">
+            <id property="id" column="did"/>
+            <result property="name" column="dname"/>
+            <result property="desc" column="desc"/>
+        </association>
+    </resultMap>
+
+    <insert id="addEmployee" parameterType="guojing.pro.entity.Employee">
+        INSERT INTO t_employee (age, `name`, gender, address, `status`) VALUES
+                (#{age,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{gender,jdbcType=INTEGER},#{address,jdbcType=VARCHAR},#{status,jdbcType=INTEGER})
+    </insert>
+
+    <delete id="deleteEmployeeById">
+        UPDATE t_employee SET status = 0 WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateEmployee">
+        UPDATE t_employee SET
+           age = #{age,jdbcType=INTEGER},
+           `name` = #{name,jdbcType=VARCHAR},
+            gender = #{gender,jdbcType=INTEGER},
+            address = #{address,jdbcType=VARCHAR}
+           where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getEmployeeById" resultMap="employee">
+        SELECT e.id,
+               e.age,
+               e.name as ename,
+               e.gender,
+               e.address,
+               d.id AS did,
+               d.name AS dname,
+               d.desc
+        FROM t_employee e
+                     LEFT JOIN t_department d ON e.dept = d.id
+        WHERE e.id = #{id,jdbcType=BIGINT}
+          AND e.status = 1
+    </select>
+
+    <select id="getAllEmployee" resultMap="employee">
+        SELECT e.id,
+               e.age,
+               e.name as ename,
+               e.gender,
+               e.address,
+               d.id AS did,
+               d.name AS dname,
+               d.desc
+        FROM t_employee e
+                     LEFT JOIN t_department d ON e.dept = d.id
+        WHERE e.status = 1
+    </select>
+
+</mapper>

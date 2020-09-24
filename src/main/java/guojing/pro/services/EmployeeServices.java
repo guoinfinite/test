@@ -1,4 +1,4 @@
-package guojing.pro.mapper;
+package guojing.pro.services;
 
 import guojing.pro.entity.Employee;
 
@@ -7,9 +7,9 @@ import java.util.List;
 /**
  * @author guojing
  * @version 1.0
- * @date 2020/9/24 上午9:58
+ * @date 2020/9/24 上午10:35
  */
-public interface EmployeeMapper {
+public interface EmployeeServices {
 
 	/**
 	 * 员工添加

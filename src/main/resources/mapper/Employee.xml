@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guojing.pro.mapper.EmployeeMapper">
+
+    <insert id="addEmployee" parameterType="guojing.pro.entity.Employee">
+        INSERT INTO t_employee (age, `name`, gender, address) VALUES
+                (#{age,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{gender,jdbcType=INTEGER},#{address,jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteEmployeeById">
+        DELETE FROM t_employee WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateEmployee">
+        UPDATE t_employee SET
+           age = #{age,jdbcType=INTEGER},
+           `name` = #{name,jdbcType=VARCHAR},
+            gender = #{gender,jdbcType=INTEGER},
+            address = #{address,jdbcType=VARCHAR}
+           where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getEmployeeById" resultType="guojing.pro.entity.Employee">
+        SELECT id,age,`name`,gender,address FROM t_employee WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getAllEmployee" resultType="guojing.pro.entity.Employee">
+        SELECT id,age,`name`,gender,address FROM t_employee
+    </select>
+
+</mapper>

@@ -1,5 +1,11 @@
 package guojing.pro.entity;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 /**
  * @author guojing
  * @version 1.0
@@ -8,9 +14,17 @@ package guojing.pro.entity;
 public class Employee {
 
 	private Long id;
+
+	@Min(value = 0, message = "年龄必须大于0岁")
+	@Max(value = 100, message = "年龄必须小于100岁")
 	private Integer age;
+	@NotEmpty(message = "姓名不能为空")
+	@Length(min = 5, max = 17, message = "姓名长度为5到17位")
 	private String name;
+	@Min(value = 0, message = "性别有误")
+	@Max(value = 1, message = "性别有误")
 	private Integer gender;
+	@NotEmpty(message = "地址不能为空")
 	private String address;
 
 	public Employee() {
